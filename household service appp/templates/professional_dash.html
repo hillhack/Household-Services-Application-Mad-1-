@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+{% block title %}Professional Dashboard{% endblock %}
+{% block body %} 
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <!-- Brand -->
+        <a class="navbar-brand" href="#">Household Services</a>
+        
+        <!-- Toggler for Mobile View -->
+        <button 
+            class="navbar-toggler" 
+            type="button" 
+            data-bs-toggle="collapse" 
+            data-bs-target="#navbarNav" 
+            aria-controls="navbarNav" 
+            aria-expanded="false" 
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <!-- Navbar Links -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <!-- Summary Link -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.summary', user_type='professional', user_id=professional.id) }}">
+                        Summary
+                    </a>
+                </li>
+                <!-- Profile Link -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.edit_profile', user_id=professional.id, user_type='professional') }}">
+                        Profile
+                    </a>
+                </li>
+            </ul>
+            
+            <!-- Dropdown Menu -->
+            <div class="dropdown ms-auto">
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                    <!-- Edit Profile -->
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('main.edit_profile', user_id=professional.id, user_type='professional') }}">
+                            Edit Profile
+                        </a>
+                    </li>
+                    <!-- Logout -->
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('main.logout') }}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+{% block content %}
+{{ super() }}
+
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h5>Dashboard</h5>
+        <a href="#" onclick="showSection('addWorkSection')">Add Work</a>
+        <a href="#" onclick="showSection('yourWorkSection')">Your Work</a>
+        <a href="#" onclick="showSection('pendingRequestsSection')">Pending Requests</a>
+        <a href="#" onclick="showSection('currentWorkSection')">Current Work</a>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content" style="flex-grow: 1;">
+        <!-- Add Work Section -->
+        <div id="addWorkSection" class="content-section mb-4">
+            <h4>Add Work</h4>
+            <form method="POST" action="{{ url_for('main.add_service', professional_id=professional.id) }}" class="p-3">
+                <input type="text" class="form-control mb-2" name="name" placeholder="Service Name" required>
+                <textarea class="form-control mb-2" name="description" placeholder="Description" required></textarea>
+                <input type="text" class="form-control mb-2" name="experience" placeholder="Experience" required>
+                <button type="submit" class="btn btn-success">Add Work</button>
+            </form>
+        </div>
+
+        <!-- Your Work Section -->
+        <div id="yourWorkSection" class="content-section table-container mb-4">
+            <h4>Your Work</h4>
+            <table id="workTable" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Service Name</th>
+                        <th>Description</th>
+                        <th>Experience</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if services %}
+                        {% for service in services %}
+                        <tr>
+                            <td>{{ service.name }}</td>
+                            <td>{{ service.description }}</td>
+                            <td>{{ service.experience }}</td>
+                            <td>{{ service.price }}</td>
+                            <td>
+                                <a href="{{ url_for('main.update_service', service_id=service.id) }}" class="btn btn-warning btn-sm">Update</a>
+                                <form action="{{ url_for('main.delete_service', service_id=service.id) }}" method="POST" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pending Requests Section -->
+        <div id="pendingRequestsSection" class="content-section table-container mb-4">
+            <h4>Pending Service Requests</h4>
+            <table id="requestTable" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Service</th>
+                        <th>Date of Request</th>
+                        <th>Status</th>
+                        <th>Date of Completion</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in service_requests if request.service_status == 'Pending' %}
+                    <tr>
+                        <td>{{ request.customer.name }}</td>
+                        <td>{{ request.service.name }}</td>
+                        <td>{{ request.date_of_request.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ request.service_status }}</td>
+                        <td>{{ request.date_of_completion.strftime('%Y-%m-%d') if request.date_of_completion else 'Not set' }}</td>
+                        <td>
+                            <form action="{{ url_for('main.handle_request', request_id=request.id) }}" method="POST" style="display:inline;">
+                                <input type="hidden" name="action" value="accept">
+                                <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                            </form>
+                            <form action="{{ url_for('main.handle_request', request_id=request.id) }}" method="POST" style="display:inline;">
+                                <input type="hidden" name="action" value="reject">
+                                <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Current Work Section -->
+        <div id="currentWorkSection" class="content-section table-container mb-4">
+            <h4>Current Work</h4>
+            <table id="currentWorkTable" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>Customer Name</th>
+                        <th>Address</th>
+                        <th>Status</th>
+                        <th>Request Date</th>
+                        <th>Due Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in service_requests if request.service_status == 'Accepted' %}
+                    <tr>
+                        <td>{{ request.service.name }}</td>
+                        <td>{{ request.customer.name }}</td>
+                        <td>{{ request.customer.address }}</td>
+                        <td>{{ request.service_status }}</td>
+                        <td>{{ request.date_of_request.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ request.date_of_completion.strftime('%Y-%m-%d') if request.date_of_completion else 'Not set' }}</td>
+                        <td>
+                            <form action="{{ url_for('main.complete_work', professional_id=professional.id) }}" method="POST">
+                                <input type="hidden" name="request_id" value="{{ request.id }}">
+                                <button type="submit" class="btn btn-success">Work Completed</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showSection(sectionId) {
+        // Hide all sections
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.style.display = 'none';
+        });
+        // Show the selected section
+        document.getElementById(sectionId).style.display = 'block';
+    }
+    
+    // Initialize sections and DataTables
+    document.addEventListener('DOMContentLoaded', () => {
+        showSection('yourWorkSection');
+        new DataTable('#workTable');
+        new DataTable('#requestTable');
+        new DataTable('#currentWorkTable');
+    });
+</script>
+
+{% endblock %}
+{% endblock %}

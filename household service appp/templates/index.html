@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Welcome{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="welcome">
+        <h3>Welcome to Household Service App</h3>
+    </div>
+    <div class="options">
+        <a href="{{ url_for('main.home') }}" class="btn">Admin Login</a>
+        <a href="{{ url_for('main.home') }}" class="btn">User Login</a>
+    </div>
+</div>
+
+{% endblock %}

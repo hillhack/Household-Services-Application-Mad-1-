@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <h1>Household Services</h1>
+        <button class="btn btn-secondary" onclick="history.back()">Return</button>
+    </div>
+</nav>
+<!-- Sidebar Section -->
+<div class="sidebar" style="position: fixed; top: 0; left: 0; width: 250px; height: 100%; background-color: #343a40; padding-top: 20px; color: white; padding-left: 15px;">
+    <h5 class="text-center">{{ user_type.capitalize() }} Dashboard</h5>
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a href="#" class="nav-link text-white" onclick="showSection('summaryCards')">Summary</a>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link text-white" onclick="showSection('statusBarChartSection')">Request History</a>
+        </li>
+    </ul>
+</div>
+
+<!-- Main Content Section -->
+<div class="container">
+    <div class="welcome">
+        <h2>Service Summary for {{ user_type.capitalize() }}</h2>
+    </div>
+
+    <!-- Summary Cards Section -->
+    <div id="summaryCards" class="row mb-4" style="display: block;">
+        <div class="col-md-4 mb-3">
+            <div class="card text-center">
+                <h5 class="card-title">Completed Requests</h5>
+                <p class="card-text">{{ request_data.completed_requests }}</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card text-center">
+                <h5 class="card-title">Pending Requests</h5>
+                <p class="card-text">{{ request_data.pending_requests }}</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card text-center">
+                <h5 class="card-title">Accepted Requests</h5>
+                <p class="card-text">{{ request_data.accepted_requests }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Request Status Chart Section -->
+    <div id="statusBarChartSection" style="display:none;">
+        <h5>Request Status Overview</h5>
+        <canvas id="statusBarChart"></canvas>
+        
+    </div>
+</div>
+
+<!-- Load Chart.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Ensure request_data is passed correctly to JavaScript
+        const requestData = {
+            completed: {{ request_data.completed_requests }},
+            pending: {{ request_data.pending_requests }},
+            accepted: {{ request_data.accepted_requests }}
+        };
+
+        // Create the bar chart
+        new Chart(document.getElementById('statusBarChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['Completed', 'Pending', 'Accepted'],
+                datasets: [{
+                    label: 'Number of Requests',
+                    data: [requestData.completed, requestData.pending, requestData.accepted],
+                    backgroundColor: ['#4caf50', '#f44336', '#ffa726']
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { 
+                        beginAtZero: true,
+                        title: { display: true, text: 'Number of Requests' }
+                    },
+                    x: { 
+                        title: { display: true, text: 'Request Status' }
+                    }
+                }
+            }
+        });
+    });
+
+    // Function to toggle between sections (Summary and Chart)
+    function showSection(sectionId) {
+        // Hide both sections first
+        document.getElementById('summaryCards').style.display = 'none';
+        document.getElementById('statusBarChartSection').style.display = 'none';
+        
+        // Show the selected section
+        document.getElementById(sectionId).style.display = 'block';
+    }
+</script>
+{% endblock %}

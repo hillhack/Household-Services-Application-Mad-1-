@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Update Service
+{% endblock %}
+
+{% block content %}
+{{ super() }}
+
+<div class="container mt-4">
+    <h2>Update Service: {{ service.name }}</h2>
+    <form method="POST">
+        <div class="form-group mb-3">
+            <label for="workName" class="form-label">Service Name:</label>
+            <input type="text" class="form-control" id="workName" name="name" value="{{ service.name }}" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="workDescription" class="form-label">Description:</label>
+            <textarea class="form-control" id="workDescription" name="description" rows="3" required>{{ service.description }}</textarea>
+        </div>
+        <div class="form-group mb-3">
+            <label for="workExperience" class="form-label">Experience:</label>
+            <input type="text" class="form-control" id="workExperience" name="experience" value="{{ service.experience }}" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="price" class="form-label">Price:</label>
+            <input type="text" class="form-control" id="price" name="price" value="{{ service.price }}" required>
+        </div>
+        <button type="submit" class="btn btn-success">Update Service</button>
+    </form>
+</div>
+{% endblock %}

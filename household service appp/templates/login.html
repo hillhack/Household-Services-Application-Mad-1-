@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+{{ super() }}
+
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background: url('/static/anime.jpg') center/cover no-repeat, rgba(0, 0, 0, 0.6);
+        height: 100vh;
+        margin: 0;
+    }
+    </style>
+    <div class = "container">
+    <div class="form">
+        <center>
+            <h3 style="color: #e3e6e8;">Login Here</h3>
+        </center>
+        <form method="POST" action="{{ url_for('main.login') }}">
+            <div class="text">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            
+            <div class="text">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            
+            <button type="submit" class="btn">Login</button>
+            
+            <div class="text">
+                <p>Not a member? <a href="{{ url_for('main.register') }}">Register</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

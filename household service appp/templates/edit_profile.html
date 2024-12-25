@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Edit Profile{% endblock %}
+{% block body %}
+{{ super() }}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <h1>Household Services</h1>
+        <button class="btn btn-secondary" onclick="history.back()">Return</button>
+    </div>
+</nav>
+<div class="container">
+    <!-- Profile Edit Form -->
+    <div class="card shadow p-4">
+        <h2 class="mb-4">Edit {{ user_type.capitalize() }} Profile</h2>
+        <form method="POST" action="{{ url_for('main.edit_profile', user_id=user_id, user_type=user_type) }}">
+            <!-- Name -->
+            <div class="form-group mb-3">
+                <label for="name">Name</label>
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    id="name" 
+                    name="name" 
+                    value="{{ profile.name if profile else '' }}" 
+                    required>
+            </div>
+
+            <!-- Contact Number -->
+            <div class="form-group mb-3">
+                <label for="contact_no">Contact Number</label>
+                <input 
+                    type="tel" 
+                    class="form-control" 
+                    id="contact_no" 
+                    name="contact_no" 
+                    value="{{ profile.contact_no if profile else '' }}" 
+                    pattern="[0-9]{10}" 
+                    title="Enter a valid 10-digit contact number." 
+                    required>
+            </div>
+
+            <!-- Address -->
+            <div class="form-group mb-3">
+                <label for="address">Address</label>
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    id="address" 
+                    name="address" 
+                    value="{{ profile.address if profile else '' }}" 
+                    required>
+            </div>
+
+            <!-- Buttons -->
+            <button type="submit" class="btn btn-primary">Update Profile</button>
+            <button type="reset" class="btn btn-secondary">Reset</button>
+        </form>
+    </div>
+</div>
+</div>
+{% endblock %}

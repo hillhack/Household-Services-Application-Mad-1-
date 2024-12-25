@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+
+    <a class="navbar-brand" href="#">Admin Dashboard</a>
+    <li>
+        <a  class="navbar-brand"href="{{ url_for('main.logout') }}">Logout</a>
+
+    </li>
+    </div>
+</nav>
+{% block content %}
+
+{{ super() }}
+
+
+<div class="d-flex" style="height: 100vh;">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="#" onclick="showSection('manageCustomers')">Manage Customers</a>
+        <a href="#" onclick="showSection('manageProfessionals')">Manage Professionals</a>
+        <a href="#" onclick="showSection('availableServices')">Manage Services</a>
+    </div>
+
+    <!-- Main Content -->
+        <div class="content" style="flex-grow: 1; padding: 20px;">
+        <section id="manageCustomers" class="content-section">
+            <h4>Manage Customers</h4>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Contact No</th>
+                            <th>Address</th>
+                            <th>Blocked</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for customer in customers %}
+                        <tr>
+                            <td>{{ customer.id }}</td>
+                            <td>{{ customer.name or 'N/A' }}</td>
+                            <td>{{ customer.contact_no or 'N/A' }}</td>
+                            <td>{{ customer.address or 'N/A' }}</td>
+                            <td>
+                                <form action="{{ url_for('main.block_user', user_type='customer', user_id=customer.id) }}" method="POST" style="display:inline;">
+                                    <button type="submit" 
+                                            class="btn btn-{{ 'danger' if customer.block == 'NO' else 'success' }} btn-sm">
+                                        {{ 'Block' if customer.block == 'NO' else 'Unblock' }}
+                                    </button>
+                                </form>
+                            </td>
+                            <td>
+                                <div class="d-flex">
+                                    <!-- View Summary Button -->
+                                    <a href="{{ url_for('main.summary', user_type='customer', user_id=customer.id) }}" 
+                                       class="btn btn-primary btn-sm me-2">View</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                    
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+            
+        <!-- Manage Professionals -->
+        <section id="manageProfessionals" class="content-section" style="display:none;">
+            <h4>Manage Professionals</h4>
+            <table class="table table-sm table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Contact</th>
+                        <th>Status</th>
+                        <th>Blocked</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for professional in professionals %}
+                    <tr>
+                        <td>{{ professional.id }}</td>
+                        <td>{{ professional.name or 'N/A' }}</td>
+                        <td>{{ professional.address or 'N/A' }}</td>
+                        <td>{{ professional.contact_no or 'N/A' }}</td>
+                        <td>{{ professional.approved_status }}</td>
+                        <td>
+                            <form action="{{ url_for('main.block_user', user_type='professional', user_id=professional.id) }}" method="POST" style="display:inline;">
+                                <button type="submit" 
+                                        class="btn btn-{{ 'danger' if professional.block == 'NO' else 'success' }} btn-sm">
+                                    {{ 'Block' if professional.block == 'NO' else 'Unblock' }}
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('main.summary', user_type='professional', user_id=professional.id) }}" 
+                               class="btn btn-primary btn-sm">View</a>
+                            {% if professional.approved_status == 'Pending' %}
+                            <form action="{{ url_for('main.approve_professional', professional_id=professional.id) }}" 
+                                  method="POST" style="display:inline;">
+                                <button class="btn btn-success btn-sm">Approve</button>
+                            </form>
+                            {% endif %}
+                        </td>
+                        
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center">No professionals found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Manage Services -->
+        <section id="availableServices" class="content-section" style="display:none;">
+            <h4>Manage Services</h4>
+            <table class="table table-sm table-bordered">
+                <thead>
+                    <tr>
+                        <th>Sr.No</th>
+                        <th>Service</th>
+                        <th>Base Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for service in services %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ service.name }}</td>
+                        <td>{{ service.base_price }}</td>
+                        <td><a href="{{ url_for('main.edit_service', service_id=service.id) }}" class="btn btn-outline-primary btn-sm">Edit</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+    
+    </main>
+        </div>
+</div>
+
+<script>
+    function showSection(id) {
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.style.display = section.id === id ? 'block' : 'none';
+        });
+    }
+</script>
+{% endblock %}
+{% endblock %}
+

@@ -1,0 +1,162 @@
+/* === CSS Variables === */
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c63ff;
+    --text-color: #fff;
+    --background-color: #f4f4f4;
+    --form-bg-color: rgba(15, 14, 14, 0.85);
+    --border-radius: 8px;
+    --transition-time: 0.3s;
+    --shadow-light: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* === Global Styles === */
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('house.jpg') center/cover no-repeat;
+    height: 100vh;
+    color: #f6eded;
+    margin: 0;
+}
+.d-grid{
+    display: flex;
+    margin: auto; 
+}
+.container {
+    justify-content: center;
+    display: grid;
+    align-items: center; /* Center items vertically */
+    grid-template-rows: auto auto; /* Adjust rows based on content */
+    height: 80vh; /* Full viewport height */
+    padding: 70px; /* Optional padding */
+    gap: 10px; /* Space between grid items */
+}
+
+
+/* === Sidebar Styles === */
+.sidebar {
+    height: 100vh; /* Full height */
+    width: 250px; /* Sidebar width */
+    position: fixed; /* Fixed position */
+    top: 0; /* Align with top of viewport */
+    left: 0; /* Align with left of viewport */
+    background-color: #343a40; /* Background color */
+    color: white; /* Text color */
+    padding-top: 20px;
+}
+
+.sidebar a {
+    color: #adb5bd; /* Link color */
+    text-decoration: none;
+    padding: 10px 20px;
+    display: block;
+    transition: background-color var(--transition-time); /* Smooth transition */
+}
+
+.sidebar a:hover {
+    color: #ffffff;
+    background-color: #495057; /* Darker background on hover */
+}
+
+/* === Content Styles === */
+.content {
+    margin-left: 250px; /* Space for the sidebar */
+    padding: 50px;
+}
+
+/* === Options Styles === */
+.options {
+    display: flex; /* Optional: Flexbox to arrange buttons horizontally */
+    gap: 20px; /* Space between buttons */
+    width: 90%; /* Width of the container */
+    padding: 10px; /* Add padding inside the div */
+    border-radius: 10px; /* Optional rounded corners */
+}
+
+/* === Animation === */
+@keyframes slide-in {
+    0% {
+        left: -100%; /* Start off-screen */
+        opacity: 0; /* Invisible at start */
+    }
+    100% {
+        left: 50%; /* End position */
+        transform: translateX(-50%); /* Center the heading */
+        opacity: 1; /* Fully visible */
+    }
+}
+
+
+.welcome {
+    position: relative; /* Enable positioning */
+    animation: slide-in 2s ease-out forwards; /* Slower animations */
+    left: 50%; /* Set initial position to center */
+    opacity: 0; /* Start invisible */
+    justify-content: center;
+    width: 180%; /* Set width relative to the container */
+    max-width: 1200px; /* Optional max width for larger screens */
+    height: 100px; /* Set a fixed height */
+    color: white; /* Text color */
+    font-size: 2rem; /* Base font size */
+    transition: background 0.5s; /* Smooth background transition */
+}
+
+/* === Form Styles === */
+.form {
+    width: 150%;
+    max-width: 400px;
+    padding: 20px;
+    background-color: var(--form-bg-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+    transition: transform var(--transition-time), box-shadow var(--transition-time);
+}
+
+.form:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--hover-shadow);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: var(--border-radius);
+    transition: box-shadow var(--transition-time);
+}
+
+.form-control:focus {
+    outline: none;
+    box-shadow: 0 0 5px var(--primary-color);
+}
+
+/* === Button Styles === */
+.btn {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    transition: background-color var(--transition-time), transform var(--transition-time);
+    font-size: 25px;
+}
+
+.btn:hover {
+    background-color: var(--secondary-color);
+    transform: scale(1.05);
+}
+
+/* === Heading Styles === */
+h3 {
+    color: var(--text-color);
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+/* === Navbar Styles === */
+.navbar {
+    margin-left: 250px; /* Same as sidebar width */
+    z-index: 1000; /* Ensure it is above other elements */
+}

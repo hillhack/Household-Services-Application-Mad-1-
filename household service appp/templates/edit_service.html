@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Admin Edit Service{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <h1>Household Services - Admin Panel</h1>
+        <button class="btn btn-secondary" onclick="history.back()">Return</button>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <h2>Edit Service Details</h2>
+    <form method="POST" action="{{ url_for('main.edit_service', service_id=service.id) }}">
+        <div class="form-group mb-3">
+            <label for="service_name">Service Name</label>
+            <input type="text" id="service_name" name="service_name" class="form-control"
+                   value="{{ service.name }}" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="base_price">Base Price</label>
+            <input type="number" id="base_price" name="base_price" class="form-control"
+                   value="{{ service.base_price }}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a href="{{ url_for('main.admin_dash') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+{% if message %}
+<div class="alert alert-info mt-3">
+    {{ message }}
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,29 @@
+<!-- Existing Work List with Collapsible Details -->
+<h3 class="mt-5">Your Works</h3>
+<div class="accordion" id="workAccordion">
+    {% for work in works %}
+    {{ super() }}
+
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="heading{{ work.id }}">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ work.id }}" aria-expanded="false" aria-controls="collapse{{ work.id }}">
+                {{ work.work_name }}
+            </button>
+        </h2>
+        <div id="collapse{{ work.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ work.id }}" data-bs-parent="#workAccordion">
+            <div class="accordion-body">
+                <p><strong>Description:</strong> {{ work.description }}</p>
+                <p><strong>Experience Required:</strong> {{ work.experience }}</p>
+                <p><strong>Date:</strong> {{ work.date }}</p>
+
+                <!-- Update and Delete Buttons -->
+                <div class="d-flex justify-content-between">
+                    <a href="{{ url_for('main.update_existing_work', work_id=work.id) }}" class="btn btn-warning btn-sm">Update</a>
+                    <a href="{{ url_for('main.delete_work', work_id=work.id) }}" class="btn btn-danger btn-sm">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <p class="text-center mt-5">No works found. Please add work entries.</p>
+    {% endfor %}

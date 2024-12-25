@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Add Work{% endblock %}
+
+{% block content %}
+{{ super() }}
+
+<div class="container mt-5">
+    <h1 class="mb-4">Add New Work</h1>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('main.add_service', professional_id=professional.id) }}">
+                <div class="mb-3">
+                    <label for="customer_name" class="form-label">Customer Name</label>
+                    <input type="text" class="form-control" id="customer_name" name="customer_name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="area" class="form-label">Area</label>
+                    <input type="text" class="form-control" id="area" name="area" required>
+                </div>
+                <div class="mb-3">
+                    <label for="status" class="form-label">Status</label>
+                    <input type="text" class="form-control" id="status" name="status" required>
+                </div>
+                <div class="mb-3">
+                    <label for="type_of_work" class="form-label">Type of Work</label>
+                    <input type="text" class="form-control" id="type_of_work" name="type_of_work" required>
+                </div>
+                <div class="mb-3">
+                    <label for="date" class="form-label">Date</label>
+                    <input type="date" class="form-control" id="date" name="date" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Work</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
